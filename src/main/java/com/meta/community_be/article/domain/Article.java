@@ -1,5 +1,6 @@
 package com.meta.community_be.article.domain;
 
+import com.meta.community_be.board.domain.Board;
 import com.meta.community_be.common.domain.TimeStamped;
 import jakarta.persistence.*;
 import lombok.Getter;
@@ -21,4 +22,8 @@ public class Article extends TimeStamped {
 
     @Column(nullable = false, columnDefinition = "TEXT")
     private String contents;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "board_id", nullable = false)
+    private Board board;
 }

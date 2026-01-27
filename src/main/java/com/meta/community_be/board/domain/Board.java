@@ -1,10 +1,14 @@
 package com.meta.community_be.board.domain;
 
+import com.meta.community_be.article.domain.Article;
 import com.meta.community_be.common.domain.TimeStamped;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+
+import java.util.ArrayList;
+import java.util.List;
 
 @Getter
 @Setter
@@ -18,4 +22,7 @@ public class Board extends TimeStamped {
 
     @Column(nullable = false)
     private String title;
+
+    @OneToMany(mappedBy = "board", cascade = CascadeType.ALL, orphanRemoval = true)
+    List<Article> articles = new ArrayList<>();
 }

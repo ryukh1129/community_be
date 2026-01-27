@@ -17,10 +17,10 @@ import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
-@Configuration // 스프링부터 설정 빈으로 등록
-@EnableWebSecurity // 스프링 시큐리티 활성화
-@EnableMethodSecurity // 스프링시큐리티의 RBAC을 위한 메서드 권한 제어 활성화
-@RequiredArgsConstructor //
+@Configuration // 스프링부트 설정 빈으로 등록
+@EnableWebSecurity // 스프링시큐리티 활성화
+@EnableMethodSecurity // 스프링시큐리티의 RBAC을 위한 메서드 권한제어 활성화
+@RequiredArgsConstructor
 public class SecurityConfig {
     private final JwtAuthenticationFilter jwtAuthenticationFilter;
     private final CustomAccessDeniedHandler customAccessDeniedHandler;
@@ -32,7 +32,7 @@ public class SecurityConfig {
         return authenticationConfiguration.getAuthenticationManager();
     }
 
-    // 스프링 시큐리티의 필터체인을 빈으로 등록, 규칙 정의
+    // 스프링시큐리티의 필터체인을 빈으로 등록, 규칙 정의
     // 참고 공식 문서 https://docs.spring.io/spring-security/reference/6.5/servlet/architecture.html#servlet-security-filters
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
@@ -42,7 +42,7 @@ public class SecurityConfig {
                 // CSRF(Cross-Site Request Forgery) 교차 요청 위조 공격
                 // JWT 토큰 기반 인증 방식은 CSRF를 방어하는 수단이므로 불필요함
                 .csrf(AbstractHttpConfigurer::disable)
-                // 토큰 기반 인증방식에서 불피요함
+                // 토큰 기반 인증방식에서 불필요함
                 .httpBasic(AbstractHttpConfigurer::disable)
                 // 스프링 시큐리티가 제공하는 기본 로그인 폼을 비활성화
                 .formLogin(AbstractHttpConfigurer::disable)
@@ -54,7 +54,6 @@ public class SecurityConfig {
                         .accessDeniedHandler(customAccessDeniedHandler)
                         .authenticationEntryPoint(customAuthenticationEntryPoint)
                 )
-
                 // 인가(Authorization) 부분으로 엔드포인트 접근 권한을 설정하는 부분
                 .authorizeHttpRequests((authorize) -> authorize
                         .requestMatchers("api/auth/**").permitAll()
