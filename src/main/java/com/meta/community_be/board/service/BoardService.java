@@ -7,8 +7,6 @@ import com.meta.community_be.board.repository.BoardRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestBody;
 
 import java.util.List;
 
@@ -18,7 +16,7 @@ public class BoardService {
     private final BoardRepository boardRepository;
 
     @Transactional
-    public BoardResponseDto createBoard(@RequestBody BoardRequestDto boardRequestDto) {
+    public BoardResponseDto createBoard(BoardRequestDto boardRequestDto) {
         // RequestDto -> Entity 변환
         Board newBoard = new Board(boardRequestDto);
         Board savedBoard = boardRepository.save(newBoard);
@@ -42,7 +40,7 @@ public class BoardService {
     }
 
     @Transactional
-    public BoardResponseDto updateBoard(@PathVariable Long id, @RequestBody BoardRequestDto boardRequestDto) {
+    public BoardResponseDto updateBoard(Long id, BoardRequestDto boardRequestDto) {
         // 해당 id의 게시판이 존재하는지 확인
         Board foundBoard = findBoardById(id);
         // 게시판 내용 수정
@@ -51,7 +49,7 @@ public class BoardService {
     }
 
     @Transactional
-    public void deleteBoard(@PathVariable Long id) {
+    public void deleteBoard(Long id) {
         // 해당 id의 게시판이 존재하는지 확인
         Board foundBoard = findBoardById(id);
         // 게시판 내용 삭제
