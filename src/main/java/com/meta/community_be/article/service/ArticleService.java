@@ -31,8 +31,8 @@ public class ArticleService {
     }
 
     @Transactional(readOnly = true)
-    public List<ArticleResponseDto> getArticles() {
-        List<ArticleResponseDto> articleResponseDtoList = articleRepository.findAllByOrderByCreatedAtDesc().stream()
+    public List<ArticleResponseDto> getArticles(Long boardId) {
+        List<ArticleResponseDto> articleResponseDtoList = articleRepository.findAllByBoardIdOrderByCreatedAtDesc(boardId).stream()
                 .map(ArticleResponseDto::new).toList();
         return articleResponseDtoList;
     }

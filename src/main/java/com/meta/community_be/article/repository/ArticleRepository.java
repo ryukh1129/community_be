@@ -10,4 +10,6 @@ public interface ArticleRepository extends JpaRepository<Article,Long> {
     List<Article> findAllByOrderByCreatedAtDesc();
 
     Optional<Article> findByIdAndBoardId(Long id, Long boardId);
+
+    List<Article> findAllByBoardIdOrderByCreatedAtDesc(Long boardId);
 }

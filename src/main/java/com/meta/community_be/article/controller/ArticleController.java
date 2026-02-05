@@ -25,8 +25,9 @@ public class ArticleController {
     }
 
     @GetMapping()
-    public ResponseEntity<List<ArticleResponseDto>> getArticles() {
-        List<ArticleResponseDto> articleResponseDtoList = articleService.getArticles();
+    public ResponseEntity<List<ArticleResponseDto>> getArticles(
+            @PathVariable Long boardId) {
+        List<ArticleResponseDto> articleResponseDtoList = articleService.getArticles(boardId);
         return ResponseEntity.ok(articleResponseDtoList);
     }
 
