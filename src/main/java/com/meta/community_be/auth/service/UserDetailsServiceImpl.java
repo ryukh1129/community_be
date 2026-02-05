@@ -1,5 +1,7 @@
 package com.meta.community_be.auth.service;
 
+import com.meta.community_be.auth.domain.PrincipalDetails;
+import com.meta.community_be.auth.domain.User;
 import com.meta.community_be.auth.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -14,7 +16,8 @@ public class UserDetailsServiceImpl implements UserDetailsService {
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        return userRepository.findByUsername(username)
+        User user = userRepository.findByUsername(username)
                 .orElseThrow(() -> new UsernameNotFoundException("사용자를 찾을 수 없습니다." + username));
+        return new PrincipalDetails(user);
     }
 }

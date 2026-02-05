@@ -4,9 +4,12 @@ import com.meta.community_be.article.domain.Article;
 import com.meta.community_be.article.dto.ArticleRequestDto;
 import com.meta.community_be.article.dto.ArticleResponseDto;
 import com.meta.community_be.article.repository.ArticleRepository;
+import com.meta.community_be.auth.domain.PrincipalDetails;
+import com.meta.community_be.auth.domain.User;
 import com.meta.community_be.board.domain.Board;
 import com.meta.community_be.board.repository.BoardRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -19,11 +22,12 @@ public class ArticleService {
     private final BoardRepository boardRepository;
 
     @Transactional
-    public ArticleResponseDto createArticle(ArticleRequestDto articleRequestDto, Long boardId) {
+    public ArticleResponseDto createArticle(ArticleRequestDto articleRequestDto, Long boardId, PrincipalDetails principalDetails) {
+        User logginedUser = principalDetails.user();
         // 해당 id의 게시판이 존재하는지 확인
         Board foundBoard = getValidBoardById(boardId);
         // RequestDto -> Entity 변환
-        Article newArticle = new Article(articleRequestDto, foundBoard);
+        Article newArticle = new Article(articleRequestDto, foundBoard, logginedUser);
         Article savedArticle = articleRepository.save(newArticle);
         // Entity -> ResponseDto 변환
         ArticleResponseDto articleResponseDto = new ArticleResponseDto(savedArticle);
@@ -31,8 +35,8 @@ public class ArticleService {
     }
 
     @Transactional(readOnly = true)
-    public List<ArticleResponseDto> getArticles(Long boardId) {
-        List<ArticleResponseDto> articleResponseDtoList = articleRepository.findAllByBoardIdOrderByCreatedAtDesc(boardId).stream()
+    public List<ArticleResponseDto> getArticles(Long boardId, Pageable pageable) {
+        List<ArticleResponseDto> articleResponseDtoList = articleRepository.findAllByBoardId(boardId, pageable).stream()
                 .map(ArticleResponseDto::new).toList();
         return articleResponseDtoList;
     }

@@ -1,11 +1,16 @@
 package com.meta.community_be.article.controller;
 
-import com.meta.community_be.article.service.ArticleService;
 import com.meta.community_be.article.dto.ArticleRequestDto;
 import com.meta.community_be.article.dto.ArticleResponseDto;
+import com.meta.community_be.article.service.ArticleService;
+import com.meta.community_be.auth.domain.PrincipalDetails;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -19,15 +24,19 @@ public class ArticleController {
     @PostMapping()
     public ResponseEntity<ArticleResponseDto> createArticle(
             @RequestBody ArticleRequestDto articleRequestDto,
-            @PathVariable Long boardId) {
-        ArticleResponseDto articleResponseDto = articleService.createArticle(articleRequestDto, boardId);
+            @PathVariable Long boardId,
+            @AuthenticationPrincipal PrincipalDetails principalDetails) {
+        ArticleResponseDto articleResponseDto = articleService.createArticle(articleRequestDto, boardId, principalDetails);
         return ResponseEntity.status(HttpStatus.CREATED).body(articleResponseDto);
     }
 
     @GetMapping()
     public ResponseEntity<List<ArticleResponseDto>> getArticles(
-            @PathVariable Long boardId) {
-        List<ArticleResponseDto> articleResponseDtoList = articleService.getArticles(boardId);
+            @PathVariable Long boardId,
+            @RequestParam(value = "page", defaultValue = "0") int page,
+            @RequestParam(value = "size", defaultValue = "10") int size) { // 기본값 0페이지 , 기본값 10개씩
+        Pageable pageable = PageRequest.of(page, size, Sort.by("createdAt").descending());
+        List<ArticleResponseDto> articleResponseDtoList = articleService.getArticles(boardId, pageable);
         return ResponseEntity.ok(articleResponseDtoList);
     }
 
