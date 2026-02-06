@@ -9,11 +9,10 @@ import com.meta.community_be.auth.domain.User;
 import com.meta.community_be.board.domain.Board;
 import com.meta.community_be.board.repository.BoardRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
-import java.util.List;
 
 @Service
 @RequiredArgsConstructor
@@ -35,10 +34,10 @@ public class ArticleService {
     }
 
     @Transactional(readOnly = true)
-    public List<ArticleResponseDto> getArticles(Long boardId, Pageable pageable) {
-        List<ArticleResponseDto> articleResponseDtoList = articleRepository.findAllByBoardId(boardId, pageable).stream()
-                .map(ArticleResponseDto::new).toList();
-        return articleResponseDtoList;
+    public Page<ArticleResponseDto> getArticles(Long boardId, Pageable pageable) {
+        Page<ArticleResponseDto> articleResponseDtoPaginationList = articleRepository.findAllByBoardId(boardId, pageable)
+                .map(ArticleResponseDto::new);
+        return articleResponseDtoPaginationList;
     }
 
     @Transactional(readOnly = true)
