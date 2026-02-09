@@ -13,6 +13,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 @RestController
 @RequestMapping("api/boards/{boardId}/articles")
@@ -22,7 +23,8 @@ public class ArticleController {
 
     @PostMapping()
     public ResponseEntity<ArticleResponseDto> createArticle(
-            @RequestBody ArticleRequestDto articleRequestDto,
+            @RequestPart("articleData") ArticleRequestDto articleRequestDto,
+            @RequestPart(value = "file", required = false) MultipartFile file,
             @PathVariable Long boardId,
             @AuthenticationPrincipal PrincipalDetails principalDetails) {
         ArticleResponseDto articleResponseDto = articleService.createArticle(articleRequestDto, boardId, principalDetails);
