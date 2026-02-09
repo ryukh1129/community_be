@@ -8,6 +8,7 @@ import com.meta.community_be.auth.domain.PrincipalDetails;
 import com.meta.community_be.auth.domain.User;
 import com.meta.community_be.board.domain.Board;
 import com.meta.community_be.board.repository.BoardRepository;
+import com.meta.community_be.likes.articleLike.repository.ArticleLikeRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -19,6 +20,7 @@ import org.springframework.transaction.annotation.Transactional;
 public class ArticleService {
     private final ArticleRepository articleRepository;
     private final BoardRepository boardRepository;
+    private final ArticleLikeRepository articleLikeRepository;
 
     @Transactional
     public ArticleResponseDto createArticle(ArticleRequestDto articleRequestDto, Long boardId, PrincipalDetails principalDetails) {
@@ -41,9 +43,15 @@ public class ArticleService {
     }
 
     @Transactional(readOnly = true)
-    public ArticleResponseDto getArticleById(Long id, Long boardId) {
-        Article foundarticle = getValidBoardAndArticleById(id, boardId);
-        ArticleResponseDto articleResponseDto = new ArticleResponseDto(foundarticle);
+    public ArticleResponseDto getArticleById(Long id, Long boardId, PrincipalDetails principalDetails) {
+        Article foundArticle = getValidBoardAndArticleById(id, boardId);
+        int currentLikesCount = (int) articleLikeRepository.countByArticle(foundArticle);
+        boolean liked = false;
+        if (principalDetails != null) {
+            User logginedUser = principalDetails.user();
+            liked = articleLikeRepository.findByArticleAndUser(foundArticle, logginedUser).isPresent();
+        }
+        ArticleResponseDto articleResponseDto = new ArticleResponseDto(foundArticle, currentLikesCount, liked);
         return articleResponseDto;
     }
 
@@ -65,8 +73,8 @@ public class ArticleService {
     }
 
     // id로 게시판과 게시글 찾는 헬퍼 메서드
-    public Article getValidBoardAndArticleById(Long id, Long boardId) {
-        return articleRepository.findByIdAndBoardId(id, boardId).orElseThrow(() ->
+    public Article getValidBoardAndArticleById(Long articleId, Long boardId) {
+        return articleRepository.findByIdAndBoardId(articleId, boardId).orElseThrow(() ->
                 new IllegalArgumentException("선택한 id의 게시글과 boardId의 게시판은 존재하지 않습니다."));
     }
 

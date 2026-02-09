@@ -44,8 +44,9 @@ public class ArticleController {
     @GetMapping("{id}")
     public ResponseEntity<ArticleResponseDto> getArticleById(
             @PathVariable Long id,
-            @PathVariable Long boardId) {
-        ArticleResponseDto articleResponseDto = articleService.getArticleById(id, boardId);
+            @PathVariable Long boardId,
+            @AuthenticationPrincipal PrincipalDetails principalDetails) {
+        ArticleResponseDto articleResponseDto = articleService.getArticleById(id, boardId, principalDetails);
         return ResponseEntity.ok(articleResponseDto);
     }
 

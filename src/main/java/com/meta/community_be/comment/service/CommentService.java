@@ -39,7 +39,7 @@ public class CommentService {
         return commentResponseDto;
     }
 
-    // id로 부모 댓글과 \게시글 찾는 헬퍼 메서드
+    // id로 부모 댓글과 게시글 찾는 헬퍼 메서드
     public Comment getValidParentComment(Long parentCommentId, Article article) {
         Comment parentComment = commentRepository.findById(parentCommentId).orElseThrow(() ->
                 new IllegalArgumentException("선택한 id의 부모 댓글은 존재하지 않습니다."));
@@ -47,5 +47,14 @@ public class CommentService {
             throw new IllegalArgumentException("대댓글은 부모 댓글과 동일한 게시글에 속해야 합니다.");
         }
         return parentComment;
+    }
+
+    // id로 게시판, 게시글, 댓글 찾는 헬퍼 메서드
+    public Comment getValidComment(Long boardId, Long articleId, Long commentId) {
+        articleService.getValidBoardAndArticleById(articleId, boardId);
+
+        return commentRepository.findByIdAndArticleId(commentId, articleId).orElseThrow(() ->
+                new IllegalArgumentException("게시글(ID: " + articleId + ")에서 댓글(ID: " + commentId + ")을 찾을 수 없습니다.")
+        );
     }
 }
