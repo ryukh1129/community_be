@@ -10,6 +10,7 @@ import com.meta.community_be.board.domain.Board;
 import com.meta.community_be.board.repository.BoardRepository;
 import com.meta.community_be.comment.domain.Comment;
 import com.meta.community_be.comment.dto.CommentResponseDto;
+import com.meta.community_be.file.dto.FileResponseDto;
 import com.meta.community_be.file.service.FileService;
 import com.meta.community_be.likes.articleLike.repository.ArticleLikeRepository;
 import com.meta.community_be.likes.commentLike.domain.CommentLike;
@@ -100,7 +101,16 @@ public class ArticleService {
                 commentResponseDtos.add(new CommentResponseDto(comment, likesCount, isLiked));
             }
         }
-        ArticleResponseDto articleResponseDto = new ArticleResponseDto(foundArticle, currentLikesCount, liked, commentResponseDtos);
+
+        // File Response DTO 생성
+        List<FileResponseDto> fileResponseDtos = foundArticle.getFiles().stream()
+                .map(file -> new FileResponseDto(
+                        file.getOriginalFileName(),
+                        file.getStoredFileName(),
+                        file.getFilePath()
+                )).toList();
+
+        ArticleResponseDto articleResponseDto = new ArticleResponseDto(foundArticle, currentLikesCount, liked, commentResponseDtos, fileResponseDtos);
         return articleResponseDto;
     }
 

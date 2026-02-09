@@ -3,6 +3,7 @@ package com.meta.community_be.article.dto;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.meta.community_be.article.domain.Article;
 import com.meta.community_be.comment.dto.CommentResponseDto;
+import com.meta.community_be.file.dto.FileResponseDto;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 
@@ -27,9 +28,9 @@ public class ArticleResponseDto {
     private LocalDateTime modifiedAt;
 
     private List<CommentResponseDto> comments;
+    private List<FileResponseDto> files;
 
-    // 게시글 상세 조회를 위해서 만든 DTO
-    public ArticleResponseDto(Article article, int likesCount, boolean liked, List<CommentResponseDto> comments) {
+    public ArticleResponseDto(Article article, int likesCount, boolean liked, List<CommentResponseDto> comments, List<FileResponseDto> files) {
         this.id = article.getId();
         this.title = article.getTitle();
         this.contents = article.getContents();
@@ -44,6 +45,7 @@ public class ArticleResponseDto {
         this.likesCount = likesCount;
         this.liked = liked;
         this.comments = comments;
+        this.files = files;
     }
 
     // 게시글 목록 조회를 위해 만든 DTO
@@ -67,5 +69,6 @@ public class ArticleResponseDto {
         this.liked = false;
 
         this.comments = List.of(); // 목록 조회 시에는 comments는 제외 (N+1 방지)
+        this.files = List.of(); // 목록 조회 시에는 comments는 제외 (N+1 방지)
     }
 }
