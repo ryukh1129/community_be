@@ -3,11 +3,15 @@ package com.meta.community_be.article.domain;
 import com.meta.community_be.article.dto.ArticleRequestDto;
 import com.meta.community_be.auth.domain.User;
 import com.meta.community_be.board.domain.Board;
+import com.meta.community_be.comment.domain.Comment;
 import com.meta.community_be.common.domain.TimeStamped;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+
+import java.util.ArrayList;
+import java.util.List;
 
 @Getter
 @Setter
@@ -32,6 +36,9 @@ public class Article extends TimeStamped {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id", nullable = false)
     private User user;
+
+    @OneToMany(mappedBy = "article", cascade = CascadeType.ALL, orphanRemoval = true)
+    List<Comment> comments = new ArrayList<>();
 
     public Article(ArticleRequestDto articleRequestDto, Board board, User user) {
         this.title = articleRequestDto.getTitle();
