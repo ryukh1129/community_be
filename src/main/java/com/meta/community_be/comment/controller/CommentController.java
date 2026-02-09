@@ -25,4 +25,14 @@ public class CommentController {
         CommentResponseDto commentResponseDto = commentService.createComment(commentRequestDto, boardId, articleId, principalDetails);
         return ResponseEntity.status(HttpStatus.CREATED).body(commentResponseDto);
     }
+
+    @GetMapping("{id}")
+    public ResponseEntity<CommentResponseDto> getCommentById(
+            @PathVariable Long boardId,
+            @PathVariable Long articleId,
+            @PathVariable Long id,
+            @AuthenticationPrincipal PrincipalDetails principalDetails) {
+        CommentResponseDto commentResponseDto = commentService.getCommentById(boardId, articleId, id, principalDetails);
+        return ResponseEntity.ok(commentResponseDto);
+    }
 }

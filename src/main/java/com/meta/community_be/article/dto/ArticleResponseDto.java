@@ -28,7 +28,8 @@ public class ArticleResponseDto {
 
     private List<CommentResponseDto> comments;
 
-    public ArticleResponseDto(Article article, int likesCount, boolean liked) {
+    // 게시글 상세 조회를 위해서 만든 DTO
+    public ArticleResponseDto(Article article, int likesCount, boolean liked, List<CommentResponseDto> comments) {
         this.id = article.getId();
         this.title = article.getTitle();
         this.contents = article.getContents();
@@ -40,16 +41,12 @@ public class ArticleResponseDto {
             this.authorNickname = article.getUser().getNickname();
         }
 
-        if (article.getComments() != null) {
-            this.comments = article.getComments().stream().map(CommentResponseDto::new).toList();
-        } else {
-            this.comments = List.of();
-        }
-
         this.likesCount = likesCount;
         this.liked = liked;
+        this.comments = comments;
     }
 
+    // 게시글 목록 조회를 위해 만든 DTO
     public ArticleResponseDto(Article article) {
         this.id = article.getId();
         this.title = article.getTitle();
