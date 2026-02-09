@@ -5,6 +5,7 @@ import com.meta.community_be.auth.domain.User;
 import com.meta.community_be.board.domain.Board;
 import com.meta.community_be.comment.domain.Comment;
 import com.meta.community_be.common.domain.TimeStamped;
+import com.meta.community_be.file.domain.File;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -39,6 +40,9 @@ public class Article extends TimeStamped {
 
     @OneToMany(mappedBy = "article", cascade = CascadeType.ALL, orphanRemoval = true)
     List<Comment> comments = new ArrayList<>();
+
+    @OneToMany(mappedBy = "article", cascade = CascadeType.ALL, orphanRemoval = true)
+    List<File> files = new ArrayList<>();
 
     public Article(ArticleRequestDto articleRequestDto, Board board, User user) {
         this.title = articleRequestDto.getTitle();

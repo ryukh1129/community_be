@@ -10,6 +10,7 @@ import com.meta.community_be.board.domain.Board;
 import com.meta.community_be.board.repository.BoardRepository;
 import com.meta.community_be.comment.domain.Comment;
 import com.meta.community_be.comment.dto.CommentResponseDto;
+import com.meta.community_be.file.service.FileService;
 import com.meta.community_be.likes.articleLike.repository.ArticleLikeRepository;
 import com.meta.community_be.likes.commentLike.domain.CommentLike;
 import com.meta.community_be.likes.commentLike.repository.CommentLikeRepository;
@@ -18,6 +19,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.*;
 import java.util.stream.Collectors;
@@ -29,15 +31,21 @@ public class ArticleService {
     private final BoardRepository boardRepository;
     private final ArticleLikeRepository articleLikeRepository;
     private final CommentLikeRepository commentLikeRepository;
+    private final FileService fileService;
 
     @Transactional
-    public ArticleResponseDto createArticle(ArticleRequestDto articleRequestDto, Long boardId, PrincipalDetails principalDetails) {
+    public ArticleResponseDto createArticle(ArticleRequestDto articleRequestDto, Long boardId, PrincipalDetails principalDetails, MultipartFile file) {
         User logginedUser = principalDetails.user();
         // 해당 id의 게시판이 존재하는지 확인
         Board foundBoard = getValidBoardById(boardId);
         // RequestDto -> Entity 변환
         Article newArticle = new Article(articleRequestDto, foundBoard, logginedUser);
         Article savedArticle = articleRepository.save(newArticle);
+
+        if (file != null && !file.isEmpty()) {
+            fileService.uploadFile(savedArticle, file);
+        }
+
         // Entity -> ResponseDto 변환
         ArticleResponseDto articleResponseDto = new ArticleResponseDto(savedArticle);
         return articleResponseDto;

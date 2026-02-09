@@ -27,7 +27,7 @@ public class ArticleController {
             @RequestPart(value = "file", required = false) MultipartFile file,
             @PathVariable Long boardId,
             @AuthenticationPrincipal PrincipalDetails principalDetails) {
-        ArticleResponseDto articleResponseDto = articleService.createArticle(articleRequestDto, boardId, principalDetails);
+        ArticleResponseDto articleResponseDto = articleService.createArticle(articleRequestDto, boardId, principalDetails, file);
         return ResponseEntity.status(HttpStatus.CREATED).body(articleResponseDto);
     }
 
