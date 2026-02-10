@@ -23,7 +23,7 @@ public class ArticleLikeService {
     public ArticleLikeResponseDto toggleArticleLike(PrincipalDetails principalDetails, Long boardId, Long articleId) {
         Article article = articleService.getValidBoardAndArticleById(articleId, boardId);
 
-        User logginedUser = principalDetails.user();
+        User logginedUser = principalDetails.getUser();
 
         Optional<ArticleLike> existingLike = articleLikeRepository.findByArticleAndUser(article, logginedUser);
 

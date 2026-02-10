@@ -36,7 +36,7 @@ public class ArticleService {
 
     @Transactional
     public ArticleResponseDto createArticle(ArticleRequestDto articleRequestDto, Long boardId, PrincipalDetails principalDetails, MultipartFile file) {
-        User logginedUser = principalDetails.user();
+        User logginedUser = principalDetails.getUser();
         // 해당 id의 게시판이 존재하는지 확인
         Board foundBoard = getValidBoardById(boardId);
         // RequestDto -> Entity 변환
@@ -62,7 +62,7 @@ public class ArticleService {
     @Transactional(readOnly = true)
     public ArticleResponseDto getArticleById(Long id, Long boardId, PrincipalDetails principalDetails) {
         Article foundArticle = getValidBoardAndArticleById(id, boardId);
-        User logginedUser = principalDetails.user();
+        User logginedUser = principalDetails.getUser();
 
         int currentLikesCount = (int) articleLikeRepository.countByArticle(foundArticle);
         boolean liked = false;
