@@ -44,8 +44,8 @@ public class CustomOAuth2UserService implements OAuth2UserService<OAuth2UserRequ
                     User newUser = new User(
                             username,
                             nickname,
-                            email,
                             passwordEncoder.encode(UUID.randomUUID().toString()), // 임시 비밀번호
+                            email,
                             UserRole.ROLE_USER // 기본 권한 설정
                     );
                     return userRepository.save(newUser);

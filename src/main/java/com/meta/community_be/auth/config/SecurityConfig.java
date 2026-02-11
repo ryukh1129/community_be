@@ -73,8 +73,7 @@ public class SecurityConfig {
                 )
                 // 인가(Authorization) 부분으로 엔드포인트 접근 권한을 설정하는 부분
                 .authorizeHttpRequests((authorize) -> authorize
-//                        .requestMatchers("api/**").permitAll()
-                        .requestMatchers("api/auth/**", "/login/oauth2/**").permitAll()
+                        .requestMatchers("api/auth/**").permitAll()
 //                        .requestMatchers("api/boards/**").permitAll()
                         .anyRequest().authenticated()
                 )
@@ -84,7 +83,11 @@ public class SecurityConfig {
 
                 // OAuth2 로그인 설정
                 .oauth2Login(oauth2 -> oauth2
-                        .userInfoEndpoint(userInfo -> userInfo.userService(customOAuth2UserService))
+                        // 실제 접근 주소는 localhost:8080/api/auth/login/google
+                        .authorizationEndpoint(authorization
+                                -> authorization.baseUri("/api/auth/login"))
+                        .userInfoEndpoint(userInfo
+                                -> userInfo.userService(customOAuth2UserService))
                         .successHandler(oAuth2LoginSuccessHandler)
                 );
         return http.build();
