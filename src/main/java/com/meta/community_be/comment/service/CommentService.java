@@ -22,7 +22,7 @@ public class CommentService {
 
     @Transactional
     public CommentResponseDto createComment(CommentRequestDto commentRequestDto, Long boardId, Long articleId, PrincipalDetails principalDetails) {
-        User logginedUser = principalDetails.user();
+        User logginedUser = principalDetails.getUser();
         // 해당 id의 게시글이 존재하는지 확인
         Article foundArticle = articleService.getValidBoardAndArticleById(boardId, articleId);
         // RequestDto -> Entity 변환
@@ -47,7 +47,7 @@ public class CommentService {
         boolean liked = false;
 
         if (principalDetails != null) {
-            User logginedUser = principalDetails.user();
+            User logginedUser = principalDetails.getUser();
             liked = commentLikeRepository.findByCommentAndUser(comment, logginedUser).isPresent();
         }
 

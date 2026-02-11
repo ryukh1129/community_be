@@ -23,7 +23,7 @@ public class CommentLikeService {
     public CommentLikeResponseDto toggleCommentLike(PrincipalDetails principalDetails, Long boardId, Long articleId, Long commentId) {
         Comment comment = commentService.getValidComment(boardId, articleId, commentId);
 
-        User logginedUser = principalDetails.user();
+        User logginedUser = principalDetails.getUser();
 
         Optional<CommentLike> existingLike = commentLikeRepository.findByCommentAndUser(comment, logginedUser);
 
