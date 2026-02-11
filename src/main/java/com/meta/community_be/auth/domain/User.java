@@ -1,6 +1,7 @@
 package com.meta.community_be.auth.domain;
 
 import com.meta.community_be.article.domain.Article;
+import com.meta.community_be.chatbot.domain.ChatRoom;
 import com.meta.community_be.common.domain.TimeStamped;
 import com.meta.community_be.likes.articleLike.domain.ArticleLike;
 import com.meta.community_be.likes.commentLike.domain.CommentLike;
@@ -46,6 +47,9 @@ public class User extends TimeStamped {
 
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<CommentLike> commentLikes = new ArrayList<>();
+
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
+    List<ChatRoom> chatRooms = new ArrayList<>();
 
     public User(String username, String nickname, String password, String email, UserRole userRole) {
         this.username = username;
