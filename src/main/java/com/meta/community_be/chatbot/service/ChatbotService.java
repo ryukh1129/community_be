@@ -6,10 +6,7 @@ import com.meta.community_be.auth.domain.User;
 import com.meta.community_be.chatbot.domain.ChatDialog;
 import com.meta.community_be.chatbot.domain.ChatRoom;
 import com.meta.community_be.chatbot.domain.SenderType;
-import com.meta.community_be.chatbot.dto.ChatRequestDto;
-import com.meta.community_be.chatbot.dto.ChatResponseDto;
-import com.meta.community_be.chatbot.dto.ChatRoomRequestDto;
-import com.meta.community_be.chatbot.dto.ChatRoomResponseDto;
+import com.meta.community_be.chatbot.dto.*;
 import com.meta.community_be.chatbot.repository.ChatDialogRepository;
 import com.meta.community_be.chatbot.repository.ChatRoomRepository;
 import lombok.RequiredArgsConstructor;
@@ -63,6 +60,28 @@ public class ChatbotService {
         saveDialog(foundRoom, SenderType.SYSTEM, apiResponseMessage);
 
         return new ChatResponseDto(apiResponseMessage);
+    }
+
+    @Transactional(readOnly = true)
+    public List<ChatRoomResponseDto> getRoomsByUser(PrincipalDetails principalDetails) {
+        User logginedUser = principalDetails.getUser();
+        List<ChatRoomResponseDto> chatRoomResponseDtoList = chatRoomRepository.findAllByUserOrderByCreatedAtDesc(logginedUser).stream()
+                .map(ChatRoomResponseDto::new).toList();
+        return chatRoomResponseDtoList;
+    }
+
+    @Transactional(readOnly = true)
+    public List<ChatDialogResponseDto> getChatDialogById(Long roomId, PrincipalDetails principalDetails) {
+        ChatRoom foundRoom = chatRoomRepository.findById(roomId)
+                .orElseThrow(() -> new IllegalArgumentException("채팅방을 찾을 수 없습니다. ID: " + roomId));
+        if (!foundRoom.getUser().getId().equals(principalDetails.getUser().getId())) {
+            throw new IllegalArgumentException("해당 채팅방에 접근할 권한이 없습니다.");
+        }
+
+        List<ChatDialogResponseDto> chatDialogResponseDtoList= foundRoom.getChatDialogs().stream()
+                .map(ChatDialogResponseDto::new)
+                .collect(Collectors.toList());
+        return chatDialogResponseDtoList;
     }
 
     private void saveDialog(ChatRoom chatRoom, SenderType senderType, String contents) {
