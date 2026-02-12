@@ -3,7 +3,8 @@
 </p>
 
 # SpringBoot Community-App Sample
-SpringBoot(Java) + JPA(ORM) 게시판 웹 서비스
+
+- React+Vite 화면은 프론트엔드 확인 : https://github.com/ryukh1129/community_fe
 
 ## 🖥️ 프로젝트 소개
 - 기본적인 커뮤니티의 게시판 백엔드 API 서버 구현 토이 프로젝트
@@ -65,7 +66,7 @@ SpringBoot(Java) + JPA(ORM) 게시판 웹 서비스
 ## ⚙️ 개발 환경(Development Environments - Non-Functional Requirements)
 - **MainLanguage** : `Java - JDK 17`
 - **IDE** : `IntelliJ Ultimate`
-- **Framework** : `SpringBoot 3.5.10`, `JPA`, `Spring Security`, `Spring AI - OpenAI 1.0.0`
+- **Framework** : `SpringBoot 3.5.10`, `JPA`, `Spring Security`, `Spring AI - OpenAI 1.1.2`- **Database** : `MySQL 8.0.43`
 - **Database** : `MySQL 8.0.43`
 - **Server** : `TOMCAT`
 
@@ -86,7 +87,7 @@ SpringBoot(Java) + JPA(ORM) 게시판 웹 서비스
     ARTICLE {
         long id PK "article_id"
         string title
-        string content
+        string contents
         long board_id FK
         datetime createdAt
         datetime updatedAt
@@ -94,7 +95,7 @@ SpringBoot(Java) + JPA(ORM) 게시판 웹 서비스
 
     COMMENT {
         long id PK "comment_id"
-        string content
+        string contents
         long article_id FK
         long parent_comment_id FK
         datetime createdAt
@@ -146,7 +147,7 @@ SpringBoot(Java) + JPA(ORM) 게시판 웹 서비스
       ARTICLE {
           long id PK "article_id"
           string title
-          string content
+          string contents
           long board_id FK
           long user_id FK
           datetime created_at
@@ -155,7 +156,7 @@ SpringBoot(Java) + JPA(ORM) 게시판 웹 서비스
   
       COMMENT {
           long id PK "comment_id"
-          string content
+          string contents
           long article_id FK
           long parent_comment_id FK
           datetime created_at
@@ -207,7 +208,7 @@ SpringBoot(Java) + JPA(ORM) 게시판 웹 서비스
       ARTICLE {
           long id PK "article_id"
           string title
-          string content
+          string contents
           long board_id FK
           long user_id FK
           datetime created_at
@@ -216,7 +217,7 @@ SpringBoot(Java) + JPA(ORM) 게시판 웹 서비스
   
       COMMENT {
           long id PK "comment_id"
-          string content
+          string contents
           long article_id FK
           long parent_comment_id FK
           datetime created_at
@@ -267,7 +268,7 @@ erDiagram
     ARTICLE {
         long id PK "article_id"
         string title
-        string content
+        string contents
         long board_id FK
         long user_id FK
         datetime created_at
@@ -276,7 +277,7 @@ erDiagram
 
     COMMENT {
         long id PK "comment_id"
-        string content
+        string contents
         long article_id FK
         long parent_comment_id FK
         datetime created_at
