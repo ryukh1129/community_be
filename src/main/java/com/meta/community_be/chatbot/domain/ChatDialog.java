@@ -1,5 +1,6 @@
 package com.meta.community_be.chatbot.domain;
 
+import com.meta.community_be.common.domain.TimeStamped;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -10,7 +11,7 @@ import lombok.Setter;
 @Entity
 @NoArgsConstructor
 @Table(name = "chat_dialog")
-public class ChatDialog {
+public class ChatDialog extends TimeStamped {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;

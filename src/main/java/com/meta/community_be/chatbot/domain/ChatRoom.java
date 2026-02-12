@@ -1,6 +1,8 @@
 package com.meta.community_be.chatbot.domain;
 
 import com.meta.community_be.auth.domain.User;
+import com.meta.community_be.chatbot.dto.ChatRoomRequestDto;
+import com.meta.community_be.common.domain.TimeStamped;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -14,7 +16,7 @@ import java.util.List;
 @Entity
 @NoArgsConstructor
 @Table(name = "chat_room")
-public class ChatRoom {
+public class ChatRoom extends TimeStamped {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -29,8 +31,8 @@ public class ChatRoom {
     @OneToMany(mappedBy = "chatRoom", cascade = CascadeType.ALL, orphanRemoval = true)
     List<ChatDialog> chatDialogs = new ArrayList<>();
 
-    public ChatRoom(User user, String title) {
+    public ChatRoom(User user, ChatRoomRequestDto chatRoomRequestDto) {
         this.user = user;
-        this.title = title;
+        this.title = chatRoomRequestDto.getTitle();
     }
 }
